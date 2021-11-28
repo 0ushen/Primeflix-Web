@@ -9,7 +9,7 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
-        path: 'shop',
+        path: '',
         loadChildren: () => import('./components/shop/shop.module').then(m => m.ShopModule)
       }
     ]
@@ -17,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -13,6 +13,7 @@ import { SwiperModule } from 'ngx-swiper-wrapper';
 import { ProductZoomComponent } from './product-details/product-zoom/product-zoom.component';
 import { ProductComponent } from './product/product.component';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { AuthorizationModule } from '../authorization/authorization.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ProductDialogComponent } from './product-dialog/product-dialog.componen
     ReactiveFormsModule,
     SharedModule,
     NgxPaginationModule,
-    SwiperModule
+    SwiperModule,
+    AuthorizationModule
   ],
   exports: [
     ProductZoomComponent,

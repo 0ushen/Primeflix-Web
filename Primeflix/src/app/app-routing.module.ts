@@ -11,13 +11,17 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./components/shop/shop.module').then(m => m.ShopModule)
+      },
+      {
+        path: '',
+        loadChildren: () => import('./components/authorization/authorization.module').then(m => m.AuthorizationModule)
       }
     ]
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { useHash: false, relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

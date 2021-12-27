@@ -1,6 +1,10 @@
-export const ApplicationName = 'CleanArchitecture.WebUI';
+export const ApplicationName = 'Primeflix';
 
 export const ReturnUrlType = 'returnUrl';
+
+export const ServerUrl = 'https://localhost:5001';
+export const ClientUrl = 'http://localhost:4200';
+
 
 export const QueryParameterNames = {
   ReturnUrl: ReturnUrlType,
@@ -22,8 +26,8 @@ export const LoginActions = {
 };
 
 let applicationPaths: ApplicationPathsType = {
-  DefaultLoginRedirectPath: '/',
-  ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
+  DefaultLoginRedirectPath: `/`,
+  ApiAuthorizationClientConfigurationUrl: `${ServerUrl}/_configuration/${ApplicationName}`,
   Login: `authentication/${LoginActions.Login}`,
   LoginFailed: `authentication/${LoginActions.LoginFailed}`,
   LoginCallback: `authentication/${LoginActions.LoginCallback}`,
@@ -40,8 +44,10 @@ let applicationPaths: ApplicationPathsType = {
   LogOutPathComponents: [],
   LoggedOutPathComponents: [],
   LogOutCallbackPathComponents: [],
-  IdentityRegisterPath: '/Identity/Account/Register',
-  IdentityManagePath: '/Identity/Account/Manage'
+  // IdentityRegisterPath: `${ServerUrl}/Identity/Account/Register`,
+  // IdentityManagePath: `${ServerUrl}/Identity/Account/Manage`
+  IdentityRegisterPath: `${ServerUrl}/auth/register`,
+  IdentityManagePath: `${ServerUrl}/Identity/Account/Manage`
 };
 
 applicationPaths = {

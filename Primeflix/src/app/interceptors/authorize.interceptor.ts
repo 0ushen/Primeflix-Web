@@ -3,6 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AuthorizeService } from '../services/authorize.service';
+import { ClientUrl, ServerUrl } from '../constants/authorize.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthorizeInterceptor implements HttpInterceptor {
   // and adds it to the request in case it's targeted at the same origin as the
   // single page application.
   private processRequestWithToken(token: string, req: HttpRequest<any>, next: HttpHandler) {
-    if (!!token && this.isSameOriginUrl(req)) {
+    if (!!token && this.isAuthorizedUrl(req)) {
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
@@ -30,15 +31,15 @@ export class AuthorizeInterceptor implements HttpInterceptor {
     return next.handle(req);
   }
 
-  private isSameOriginUrl(req: any) {
+  private isAuthorizedUrl(req: any) {
     // It's an absolute url with the same origin.
-    if (req.url.startsWith(`${window.location.origin}/`)) {
+    if (req.url.startsWith(`${ClientUrl}/` || `${ServerUrl}/`)) {
       return true;
     }
 
     // It's a protocol relative url with the same origin.
     // For example: //www.example.com/api/Products
-    if (req.url.startsWith(`//${window.location.host}/`)) {
+    if (req.url.startsWith(`//${ClientUrl}/` || `//${ServerUrl}/`)) {
       return true;
     }
 

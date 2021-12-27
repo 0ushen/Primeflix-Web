@@ -33,6 +33,7 @@ import { HeaderComponent } from './header/header.component';
 import { ShoppingWidgetsComponent } from './shopping-widgets/shopping-widgets.component';
 import { ShoppingWidgetsTwoComponent } from './shopping-widgets-two/shopping-widgets-two.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthorizationModule } from '../authorization/authorization.module';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatDividerModule,
     MatCardModule,
     FlexLayoutModule,
-    NgxSkeletonLoaderModule
+    NgxSkeletonLoaderModule,
+    AuthorizationModule
   ],
   exports: [
     CommonModule,

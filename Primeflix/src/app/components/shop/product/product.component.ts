@@ -5,7 +5,7 @@ import { Product } from 'src/app/models/product.model';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
-import { WishlistService } from 'src/app/services/wishlist.service';
+import { ProductDto } from 'src/app/web-api-client';
 
 @Component({
   selector: 'app-product',
@@ -15,29 +15,18 @@ import { WishlistService } from 'src/app/services/wishlist.service';
 export class ProductComponent implements OnInit {
 
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter();
-  @Input() product: Product;
+  @Input() product: ProductDto;
 
-  constructor(private cartService: CartService, public productsService: ProductService, private wishlistService: WishlistService, private dialog: MatDialog, private router: Router) { }
+  constructor(private cartService: CartService, public productsService: ProductService, private dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
   }
 
   // Add to cart
-  public addToCart(product: Product, quantity: number = 1) {
+  public addToCart(product: ProductDto, quantity: number = 1) {
     this.cartService.addToCart(product, quantity);
     console.log(product, quantity);
   }
-
-  // Add to wishlist
-  public addToWishlist(product: Product) {
-    this.wishlistService.addToWishlist(product);
-  }
-
-  // Add to compare
-  public addToCompare(product: Product) {
-    this.productsService.addToCompare(product);
-  }
-
 
   public openProductDialog(product) {
     let dialogRef = this.dialog.open(ProductDialogComponent, {

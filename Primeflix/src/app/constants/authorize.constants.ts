@@ -2,7 +2,7 @@ export const ApplicationName = 'Primeflix';
 
 export const ReturnUrlType = 'returnUrl';
 
-export const ServerUrl = 'https://localhost:5001';
+export const IdentityServerUrl = 'https://localhost:6001';
 export const ClientUrl = 'http://localhost:4200';
 
 
@@ -27,7 +27,7 @@ export const LoginActions = {
 
 let applicationPaths: ApplicationPathsType = {
   DefaultLoginRedirectPath: `/`,
-  ApiAuthorizationClientConfigurationUrl: `${ServerUrl}/_configuration/${ApplicationName}`,
+  ApiAuthorizationClientConfigurationUrl: `${IdentityServerUrl}/_configuration/${ApplicationName}`,
   Login: `authentication/${LoginActions.Login}`,
   LoginFailed: `authentication/${LoginActions.LoginFailed}`,
   LoginCallback: `authentication/${LoginActions.LoginCallback}`,
@@ -46,8 +46,8 @@ let applicationPaths: ApplicationPathsType = {
   LogOutCallbackPathComponents: [],
   // IdentityRegisterPath: `${ServerUrl}/Identity/Account/Register`,
   // IdentityManagePath: `${ServerUrl}/Identity/Account/Manage`
-  IdentityRegisterPath: `${ServerUrl}/auth/register`,
-  IdentityManagePath: `${ServerUrl}/Identity/Account/Manage`
+  IdentityRegisterPath: `${IdentityServerUrl}/auth/register`,
+  IdentityManagePath: `${IdentityServerUrl}/Identity/Account/Manage`
 };
 
 applicationPaths = {

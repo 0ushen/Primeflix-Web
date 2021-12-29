@@ -7,7 +7,8 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { MainComponent } from './components/main/main.component';
 import { ShopModule } from './components/shop/shop.module';
 import { SharedModule } from './components/shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthorizeInterceptor } from './interceptors/authorize.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

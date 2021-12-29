@@ -40,7 +40,7 @@ export class AppComponent {
       }
       window.scrollTo(0,0)
   });
-  document.documentElement.style.setProperty('--theme-deafult', '#ef6c00');
+  document.documentElement.style.setProperty('--theme-deafult', '#91ebe0');
   }
 
 }

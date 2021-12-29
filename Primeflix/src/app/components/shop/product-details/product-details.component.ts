@@ -12,6 +12,7 @@ import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { ProductService } from 'src/app/services/product.service';
 import { CartService } from 'src/app/services/cart.service';
 import { SwiperConfigInterface, SwiperDirective } from 'ngx-swiper-wrapper';
+import { PaginatedListOfProductDto, ProductDto } from 'src/app/web-api-client';
 
 @Component({
   selector: 'app-product-details',
@@ -25,8 +26,8 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('zoomViewer', { static: true }) zoomViewer;
   @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
 
-  public product: Product = {};
-  public products: Product[] = [];
+  public product: ProductDto = new ProductDto();
+  public products: ProductDto[] = [];
 
   public image: any;
   public zoomImage: any;
@@ -54,7 +55,7 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit() {
     this.productsService
       .getProducts()
-      .subscribe((product) => (this.products = product));
+      .subscribe((product) => (this.products = product.items));
 
     this.getRelatedProducts();
   }
@@ -117,19 +118,19 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getRelatedProducts() {
-    this.productsService.getProducts().subscribe((product: Product[]) => {
-      this.products = product;
+    this.productsService.getProducts().subscribe((product: PaginatedListOfProductDto) => {
+      this.products = product.items;
     });
   }
 
   // Add to cart
-  public addToCart(product: Product, quantity) {
+  public addToCart(product: ProductDto, quantity) {
     if (quantity == 0) return false;
     this.cartService.addToCart(product, parseInt(quantity));
   }
 
   // Add to cart
-  public buyNow(product: Product, quantity) {
+  public buyNow(product: ProductDto, quantity) {
     if (quantity > 0) this.cartService.addToCart(product, parseInt(quantity));
     this.router.navigate(['/pages/checkout']);
   }

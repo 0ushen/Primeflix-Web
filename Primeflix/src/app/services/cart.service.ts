@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartItem } from 'src/app/models/cart-item';
 import { map } from 'rxjs/operators';
 import { Observable, BehaviorSubject, Subscriber } from 'rxjs';
+import { ProductDto } from '../web-api-client';
 
 // Get product from Localstorage
 let products = JSON.parse(localStorage.getItem("cartItem")) || [];
@@ -33,7 +34,7 @@ public observer   :  Subscriber<{}>;
   }
 
    // Add to cart
-   public addToCart(product: Product, quantity: number) {
+   public addToCart(product: ProductDto, quantity: number) {
     let message, status;
      var item: CartItem | boolean = false;
      // If Products exist
@@ -100,7 +101,7 @@ public getTotalAmount(): Observable<number> {
 }
 
 // Update Cart Value
-public updateCartQuantity(product: Product, quantity: number): CartItem | boolean {
+public updateCartQuantity(product: ProductDto, quantity: number): CartItem | boolean {
   return products.find((items, index) => {
     if(items.product.id == product.id) {
       let qty = products[index].quantity + quantity;

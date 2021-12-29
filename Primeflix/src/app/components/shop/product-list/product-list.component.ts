@@ -3,6 +3,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Product, ColorFilter } from 'src/app/models/product.model';
 import { FormGroup } from '@angular/forms';
+import { ProductDto } from 'src/app/web-api-client';
 
 @Component({
   selector: 'product-list',
@@ -20,9 +21,9 @@ export class ProductListComponent implements OnInit {
   public filterForm: FormGroup;
   public colorFilters: ColorFilter[] = [];
 
-  public items: Product[] = [];
-  public allItems: Product[] = [];
-  public products: Product[] = [];
+  public items: ProductDto[] = [];
+  public allItems: ProductDto[] = [];
+  public products: ProductDto[] = [];
   public tags: any[] = [];
   public colors: any[] = [];
 
@@ -98,14 +99,14 @@ export class ProductListComponent implements OnInit {
   }
 
   public onChangeSearch(val: string){
-    this.allItems = this.products.filter((item: Product) => {
+    this.allItems = this.products.filter((item: ProductDto) => {
       return item.name.toLocaleLowerCase().includes(val.toLocaleLowerCase());
     });
   }
 
   // Initialize filetr Items
-  public filterItems(): Product[] {
-    return this.items.filter((item: Product) => {
+  public filterItems(): ProductDto[] {
+    return this.items.filter((item: ProductDto) => {
       const Colors: boolean = this.colorFilters.reduce((prev, curr) => {
         // Match Color
         if (item.colors) {
@@ -136,7 +137,7 @@ export class ProductListComponent implements OnInit {
     console.log(price);
     console.log(this.products);
 
-    this.allItems = this.products.filter((item: Product) => {
+    this.allItems = this.products.filter((item: ProductDto) => {
       return item.price >= price.priceFrom && item.price <= price.priceTo;
     });
     console.log(this.products);

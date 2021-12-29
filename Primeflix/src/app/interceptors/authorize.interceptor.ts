@@ -3,7 +3,8 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AuthorizeService } from '../services/authorize.service';
-import { ClientUrl, ServerUrl } from '../constants/authorize.constants';
+import { ClientUrl, IdentityServerUrl } from '../constants/authorize.constants';
+import { API_BASE_URL } from '../web-api-client';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthorizeInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authorize.getAccessToken()
-      .pipe(mergeMap(token => this.processRequestWithToken(token, req, next)));
+                         .pipe(mergeMap(token => this.processRequestWithToken(token, req, next)));
   }
 
   // Checks if there is an access_token available in the authorize service
@@ -32,14 +33,14 @@ export class AuthorizeInterceptor implements HttpInterceptor {
   }
 
   private isAuthorizedUrl(req: any) {
-    // It's an absolute url with the same origin.
-    if (req.url.startsWith(`${ClientUrl}/` || `${ServerUrl}/`)) {
+    // It's an absolute url with the same origin or with the api server origin.
+    if (req.url.startsWith(`${API_BASE_URL}/`) || req.url.startsWith(`${ClientUrl}/`)) {
       return true;
     }
 
     // It's a protocol relative url with the same origin.
     // For example: //www.example.com/api/Products
-    if (req.url.startsWith(`//${ClientUrl}/` || `//${ServerUrl}/`)) {
+    if (req.url.startsWith(`//${API_BASE_URL}/`) || req.url.startsWith(`//${ClientUrl}/`)) {
       return true;
     }
 

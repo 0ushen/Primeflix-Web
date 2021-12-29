@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Product } from 'src/app/models/product.model';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
+import { ProductDto } from 'src/app/web-api-client';
 
 @Component({
   selector: 'app-product-dialog',
@@ -12,21 +13,24 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductDialogComponent implements OnInit {
 
-  public products: Product[] = [];
+  public products: ProductDto[] = [];
   public counter: number = 1;
   public variantImage: any = '';
   public selectedColor: any = '';
   public selectedSize: any = '';
 
-  constructor(private router: Router, public productsService: ProductService, private cartService: CartService, public dialogRef: MatDialogRef<ProductDialogComponent>, @Inject(MAT_DIALOG_DATA) public product: Product) { }
+  constructor(
+    private router: Router,
+    public productsService: ProductService,
+    private cartService: CartService,
+    public dialogRef: MatDialogRef<ProductDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public product: ProductDto) { }
 
   ngOnInit() {
-    this.productsService.getProducts().subscribe(product => this.products = product);
-
+    this.productsService.getProducts().subscribe(product => this.products = product.items);
   }
 
-
-  public addToCart(product: Product, quantity) {
+  public addToCart(product: ProductDto, quantity) {
     if (quantity == 0) return false;
     this.cartService.addToCart(product, parseInt(quantity));
   }

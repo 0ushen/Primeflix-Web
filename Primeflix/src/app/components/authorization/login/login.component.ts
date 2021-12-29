@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { ApplicationPaths, ClientUrl, LoginActions, QueryParameterNames, ReturnUrlType, ServerUrl } from 'src/app/constants/authorize.constants';
+import { ApplicationPaths, ClientUrl, LoginActions, QueryParameterNames, ReturnUrlType, IdentityServerUrl } from 'src/app/constants/authorize.constants';
 import { AuthenticationResultStatus, AuthorizeService } from 'src/app/services/authorize.service';
 
 // The main responsibility of this component is to handle the user's login process.

@@ -16,21 +16,7 @@
         <h4>{{ product.name }}</h4>
       </div>
       <div class="stars">
-        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted"
-          >star_rate</mat-icon
-        >
-        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted"
-          >star_rate</mat-icon
-        >
-        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted"
-          >star_rate</mat-icon
-        >
-        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted"
-          >star_rate</mat-icon
-        >
-        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted"
-          >star_rate</mat-icon
-        >
+        <mat-icon class="mat-icon-xs mat-icon material-icons ng-star-inserted" *ngFor="let i of [].constructor(product.stars)">star_rate</mat-icon>
       </div>
       <div
         class="price-wrap"

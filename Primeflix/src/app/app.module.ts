@@ -9,6 +9,8 @@ import { ShopModule } from './components/shop/shop.module';
 import { SharedModule } from './components/shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthorizeInterceptor } from './interceptors/authorize.interceptor';
+import { API_BASE_URL } from './web-api-client';
+import { ApiUrl } from './constants/authorize.constants';
 
 @NgModule({
   declarations: [

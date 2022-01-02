@@ -4,6 +4,7 @@ export const ReturnUrlType = 'returnUrl';
 
 export const IdentityServerUrl = 'https://localhost:6001';
 export const ClientUrl = 'http://localhost:4200';
+export const ApiUrl = 'https://localhost:5001';
 
 
 export const QueryParameterNames = {

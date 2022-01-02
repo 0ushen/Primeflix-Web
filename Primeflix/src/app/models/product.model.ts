@@ -1,5 +1,5 @@
 // Product Tag
-export type ProductTags = 'nike' | 'puma' | 'lifestyle' | 'caprese';
+export type ProductTags = 'comedy' | 'documentary';
 
 // Product Colors
 export type ProductColor = 'white' | 'black' | 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'gray' | 'orange' | 'pink';

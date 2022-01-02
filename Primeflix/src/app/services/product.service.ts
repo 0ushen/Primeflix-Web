@@ -8,9 +8,6 @@ import { PaginatedListOfProductDto, ProductDto, ProductsClient } from '../web-ap
 
 
 
-// Get product from Localstorage
-let products = JSON.parse(localStorage.getItem("compareItem")) || [];
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +27,8 @@ export class ProductService {
 
   private products(): Observable<PaginatedListOfProductDto> {
     // return this.httpClient.get<Product[]>('assets/data/products2.json');
+    this.productsClient.getProductsWithPagination(1, 1, 10).subscribe(x => console.log(x));
+
     return this.productsClient.getProductsWithPagination(1, 1, 10);
   }
 

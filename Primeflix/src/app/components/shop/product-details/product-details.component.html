@@ -67,7 +67,7 @@
                   product.price | currency: productsService?.currency:"symbol"
                 }}
               </h3>
-              <p class="text-muted description">{{ product.description }}</p>
+              <p class="text-muted description">{{ product.shortDetails }}</p>
             </div>
             <div class="py-1 mt-15">
               <p>
@@ -135,68 +135,8 @@
             <mat-tab label="Description">
               <div class="full-desc lh">
                 <p class="text-muted">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industrys
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum. Lorem
-                  Ipsum is simply dummy text of the printing and typesetting
-                  industry. Lorem Ipsum has been the industrys standard dummy
-                  text ever since the 1500s, when an unknown printer took a
-                  galley of type and scrambled it to make a type specimen book.
-                  It has survived not only five centuries, but also the leap
-                  into electronic typesetting, remaining essentially unchanged.
-                  It was popularised in the 1960s with the release of Letraset
-                  sheets containing Lorem Ipsum passages, and more recently with
-                  desktop publishing software like Aldus PageMaker including
-                  versions of Lorem Ipsum.
+                  {{ product.description }}
                 </p>
-              </div>
-            </mat-tab>
-            <mat-tab label="Details">
-              <div class="full-desc lh text-muted">
-                <p>
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                </p>
-                <ul class="px-2 mt-1">
-                  <li>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </li>
-                  <li>
-                    Aenean vehicula, tortor gravida elementum tincidunt, justo
-                    lorem vestibulum ex, eget egestas arcu tellus in magna.
-                    Vivamus gravida, ipsum vel luctus luctus, nisi felis
-                    vestibulum est, nec interdum tellus leo quis tellus. Sed sit
-                    amet convallis enim, in laoreet orci.
-                  </li>
-                  <li>
-                    Donec et elit at nulla congue interdum sit amet varius erat.
-                  </li>
-                  <li>
-                    Nulla sit amet risus pellentesque, dignissim massa ut,
-                    dignissim arcu.
-                  </li>
-                  <li>
-                    Morbi dapibus ligula at faucibus tempus. Aenean vehicula,
-                    tortor gravida elementum tincidunt, justo lorem vestibulum
-                    ex, eget egestas arcu tellus in magna. Vivamus gravida,
-                    ipsum vel luctus luctus, nisi felis vestibulum est, nec
-                    interdum tellus leo quis tellus. Sed sit amet convallis
-                    enim, in laoreet orci.
-                  </li>
-                  <li>
-                    Nunc sodales justo ut nisi euismod, quis condimentum leo
-                    varius.
-                  </li>
-                </ul>
               </div>
             </mat-tab>
             <mat-tab label="Reviews">

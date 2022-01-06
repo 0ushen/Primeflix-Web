@@ -12,12 +12,9 @@ import { AppSettings, Settings } from 'src/app/services/color-option.service';
 export class HeaderComponent implements OnInit {
   public sidenavMenuItems: Array<any>;
 
-  public currencies = ['USD', 'EUR'];
+  public currencies = ['EUR'];
   public currency: any;
-  public flags = [
-    { name: 'English', image: 'assets/images/flags/gb.svg' },
-    { name: 'French', image: 'assets/images/flags/fr.svg' },
-  ];
+  public flags = [{ name: 'English', image: 'assets/images/flags/gb.svg' }];
   public flag: any;
 
   products: Product[];
@@ -43,10 +40,11 @@ export class HeaderComponent implements OnInit {
     this.flag = this.flags[0];
   }
 
-  public changeCurrency(currency) {
+  public changeCurrency(currency: any) {
     this.currency = currency;
   }
-  public changeLang(flag) {
+
+  public changeLang(flag: any) {
     this.flag = flag;
   }
 }

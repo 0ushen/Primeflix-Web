@@ -9,10 +9,9 @@ import { ProductDto } from 'src/app/web-api-client';
 @Component({
   selector: 'app-product-dialog',
   templateUrl: './product-dialog.component.html',
-  styleUrls: ['./product-dialog.component.sass']
+  styleUrls: ['./product-dialog.component.sass'],
 })
 export class ProductDialogComponent implements OnInit {
-
   public products: ProductDto[] = [];
   public counter: number = 1;
   public variantImage: any = '';
@@ -24,10 +23,13 @@ export class ProductDialogComponent implements OnInit {
     public productsService: ProductService,
     private cartService: CartService,
     public dialogRef: MatDialogRef<ProductDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public product: ProductDto) { }
+    @Inject(MAT_DIALOG_DATA) public product: ProductDto
+  ) {}
 
   ngOnInit() {
-    this.productsService.getProducts().subscribe(product => this.products = product.items);
+    this.productsService
+      .getProducts()
+      .subscribe((product) => (this.products = product.items));
   }
 
   public addToCart(product: ProductDto, quantity) {
@@ -49,10 +51,8 @@ export class ProductDialogComponent implements OnInit {
     }
   }
 
-  // Add to cart
   public buyNow() {
     this.router.navigate(['/home/product', this.product.id]);
     this.close();
   }
-
 }

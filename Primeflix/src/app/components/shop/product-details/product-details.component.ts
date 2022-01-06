@@ -5,8 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { Product } from 'src/app/models/product.model';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { ProductService } from 'src/app/services/product.service';
@@ -20,18 +19,16 @@ import { PaginatedListOfProductDto, ProductDto } from 'src/app/web-api-client';
   styleUrls: ['./product-details.component.sass'],
 })
 export class ProductDetailsComponent implements OnInit {
-  public config: SwiperConfigInterface = {};
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('zoomViewer', { static: true }) zoomViewer;
   @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
 
+  public config: SwiperConfigInterface = {};
   public product: ProductDto = new ProductDto();
   public products: ProductDto[] = [];
-
   public image: any;
   public zoomImage: any;
-
   public counter: number = 1;
 
   index: number;
@@ -89,7 +86,7 @@ export class ProductDetailsComponent implements OnInit {
     };
   }
 
-  public openProductDialog(product, bigProductImageIndex) {
+  public openProductDialog(product: any, bigProductImageIndex: any) {
     let dialogRef = this.dialog.open(ProductZoomComponent, {
       data: { product, index: bigProductImageIndex },
       panelClass: 'product-dialog',
@@ -101,9 +98,7 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
-  public selectImage(index) {
-    console.log(this.product);
-    console.log(index);
+  public selectImage(index: number) {
     this.bigProductImageIndex = index;
   }
 
@@ -118,18 +113,18 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getRelatedProducts() {
-    this.productsService.getProducts().subscribe((product: PaginatedListOfProductDto) => {
-      this.products = product.items;
-    });
+    this.productsService
+      .getProducts()
+      .subscribe((product: PaginatedListOfProductDto) => {
+        this.products = product.items;
+      });
   }
 
-  // Add to cart
   public addToCart(product: ProductDto, quantity) {
     if (quantity == 0) return false;
     this.cartService.addToCart(product, parseInt(quantity));
   }
 
-  // Add to cart
   public buyNow(product: ProductDto, quantity) {
     if (quantity > 0) this.cartService.addToCart(product, parseInt(quantity));
     this.router.navigate(['/pages/checkout']);
@@ -153,7 +148,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  public onMouseLeave(event) {
+  public onMouseLeave() {
     this.zoomViewer.nativeElement.children[0].style.display = 'none';
   }
 

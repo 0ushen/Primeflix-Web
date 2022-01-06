@@ -39,7 +39,6 @@ export class AuthorizeInterceptor implements HttpInterceptor {
     }
 
     // It's a protocol relative url with the same origin.
-    // For example: //www.example.com/api/Products
     if (req.url.startsWith(`//${API_BASE_URL}/`) || req.url.startsWith(`//${ClientUrl}/`)) {
       return true;
     }

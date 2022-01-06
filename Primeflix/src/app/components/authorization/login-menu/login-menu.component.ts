@@ -6,16 +6,18 @@ import { AuthorizeService } from 'src/app/services/authorize.service';
 @Component({
   selector: 'app-login-menu',
   templateUrl: './login-menu.component.html',
-  styleUrls: ['./login-menu.component.sass']
+  styleUrls: ['./login-menu.component.sass'],
 })
 export class LoginMenuComponent implements OnInit {
   public isAuthenticated: Observable<boolean>;
   public userName: Observable<string>;
 
-  constructor(private authorizeService: AuthorizeService) { }
+  constructor(private authorizeService: AuthorizeService) {}
 
   ngOnInit() {
     this.isAuthenticated = this.authorizeService.isAuthenticated();
-    this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
+    this.userName = this.authorizeService
+      .getUser()
+      .pipe(map((u) => u && u.name));
   }
 }

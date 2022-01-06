@@ -2,16 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { AuthenticationResultStatus, AuthorizeService } from 'src/app/services/authorize.service';
-import { ApplicationPaths, ClientUrl, LogoutActions, ReturnUrlType, IdentityServerUrl } from 'src/app/constants/authorize.constants';
+import {
+  AuthenticationResultStatus,
+  AuthorizeService,
+} from 'src/app/services/authorize.service';
+import {
+  ApplicationPaths,
+  ClientUrl,
+  LogoutActions,
+  ReturnUrlType,
+} from 'src/app/constants/authorize.constants';
 
-// The main responsibility of this component is to handle the user's logout process.
-// This is the starting point for the logout process, which is usually initiated when a
-// user clicks on the logout button on the LoginMenu component.
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
-  styleUrls: ['./logout.component.sass']
+  styleUrls: ['./logout.component.sass'],
 })
 export class LogoutComponent implements OnInit {
   public message = new BehaviorSubject<string>(null);
@@ -19,7 +24,8 @@ export class LogoutComponent implements OnInit {
   constructor(
     private authorizeService: AuthorizeService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -29,9 +35,10 @@ export class LogoutComponent implements OnInit {
           await this.logout(this.getReturnUrl());
         } else {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
-          this.message.next('The logout was not initiated from within the page.');
+          this.message.next(
+            'The logout was not initiated from within the page.'
+          );
         }
-
         break;
       case LogoutActions.LogoutCallback:
         await this.processLogoutCallback();
@@ -46,9 +53,10 @@ export class LogoutComponent implements OnInit {
 
   private async logout(returnUrl: string): Promise<void> {
     const state: INavigationState = { returnUrl };
-    const isauthenticated = await this.authorizeService.isAuthenticated().pipe(
-      take(1)
-    ).toPromise();
+    const isauthenticated = await this.authorizeService
+      .isAuthenticated()
+      .pipe(take(1))
+      .toPromise();
     if (isauthenticated) {
       const result = await this.authorizeService.signOut(state);
       switch (result.status) {
@@ -89,23 +97,30 @@ export class LogoutComponent implements OnInit {
 
   private async navigateToReturnUrl(returnUrl: string) {
     await this.router.navigateByUrl(returnUrl, {
-      replaceUrl: true
+      replaceUrl: true,
     });
   }
 
   private getReturnUrl(state?: INavigationState): string {
-    const fromQuery = (this.activatedRoute.snapshot.queryParams as INavigationState).returnUrl;
-    // If the url is comming from the query string, check that is either
+    const fromQuery = (
+      this.activatedRoute.snapshot.queryParams as INavigationState
+    ).returnUrl;
+    // If the url is coming from the query string, check that is either
     // a relative url or an absolute url
-    if (fromQuery &&
-      !(fromQuery.startsWith(`${ClientUrl}/`) ||
-        /\/[^\/].*/.test(fromQuery))) {
+    if (
+      fromQuery &&
+      !(fromQuery.startsWith(`${ClientUrl}/`) || /\/[^\/].*/.test(fromQuery))
+    ) {
       // This is an extra check to prevent open redirects.
-      throw new Error('Invalid return url. The return url needs to have the same origin as the current page.');
+      throw new Error(
+        'Invalid return url. The return url needs to have the same origin as the current page.'
+      );
     }
-    return (state && state.returnUrl) ||
+    return (
+      (state && state.returnUrl) ||
       fromQuery ||
-      ApplicationPaths.DefaultLoginRedirectPath;
+      ApplicationPaths.DefaultLoginRedirectPath
+    );
   }
 }
 

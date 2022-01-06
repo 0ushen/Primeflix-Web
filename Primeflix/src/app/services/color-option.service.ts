@@ -11,6 +11,6 @@ export class AppSettings {
     public settings = new Settings(
         'Sophia',  // theme name
         'orange',     // green, blue, red, pink, purple, grey
-        false       
+        false
     )
 }

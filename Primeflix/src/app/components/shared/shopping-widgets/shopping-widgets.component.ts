@@ -24,9 +24,6 @@ export class ShoppingWidgetsComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
-  public updateCurrency(curr) {
-    this.productService.currency = curr;
-  }
 
   public removeItem(item: CartItem) {
     this.cartService.removeFromCart(item);

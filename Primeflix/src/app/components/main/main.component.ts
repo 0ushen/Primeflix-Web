@@ -11,25 +11,19 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   public sidenavMenuItems: Array<any>;
-
   public currencies = ['USD', 'EUR'];
   public currency: any;
   public flags = [
     { name: 'English', image: 'assets/images/flags/gb.svg' },
-    { name: 'French', image: 'assets/images/flags/fr.svg' },
   ];
   public flag: any;
+  public banners = [];
+  public url: any;
 
   products: Product[];
-
   indexProduct: number;
   shoppingCartItems: CartItem[] = [];
-
-  public banners = [];
-
   wishlistItems: Product[] = [];
-
-  public url: any;
 
   constructor(public router: Router, private cartService: CartService) {
     this.cartService
@@ -44,16 +38,13 @@ export class MainComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {}
-
   ngOnInit() {
     this.currency = this.currencies[0];
     this.flag = this.flags[0];
   }
 
-  public changeCurrency(currency: any) {
-    this.currency = currency;
-  }
+  ngAfterViewInit() {}
+
   public changeLang(flag: any) {
     this.flag = flag;
   }

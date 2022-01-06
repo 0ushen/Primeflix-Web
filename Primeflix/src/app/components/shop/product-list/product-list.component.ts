@@ -8,12 +8,11 @@ import { ProductDto } from 'src/app/web-api-client';
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.sass']
+  styleUrls: ['./product-list.component.sass'],
 })
 export class ProductListComponent implements OnInit {
   public sidenavOpen: boolean = true;
-  public animation: any; // Animation
-  public sortByOrder: string = ''; // sorting
+  public sortByOrder: string = '';
   public page: any;
   public tagsFilters: any[] = [];
   public viewType: string = 'grid';
@@ -31,7 +30,7 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private route: ActivatedRoute
   ) {
-    this.route.params.subscribe((params: Params) => {
+    this.route.params.subscribe(() => {
       // const category = params['category'];
       const category = 'all';
       this.productService
@@ -45,11 +44,12 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  // Get current product tags
+  ngOnInit() {}
+
   public getTags(products: any[]) {
     var uniqueBrands = [];
     var itemBrand = Array();
-    products.map((product: { tags: any[]; }, index: any) => {
+    products.map((product: { tags: any[] }) => {
       if (product.tags) {
         product.tags.map((tag: any) => {
           const index = uniqueBrands.indexOf(tag);
@@ -63,11 +63,10 @@ export class ProductListComponent implements OnInit {
     this.tags = itemBrand;
   }
 
-  // Get current product colors
   public getColors(products: any[]) {
     var uniqueColors = [];
     var itemColor = Array();
-    products.map((product: { colors: any[]; }, index: any) => {
+    products.map((product: { colors: any[] }) => {
       if (product.colors) {
         product.colors.map((color: any) => {
           const index = uniqueColors.indexOf(color);
@@ -81,51 +80,44 @@ export class ProductListComponent implements OnInit {
     this.colors = itemColor;
   }
 
-  ngOnInit() {}
-
   public changeViewType(viewType: string, viewCol: number) {
     this.viewType = viewType;
     this.viewCol = viewCol;
   }
 
-  // Update tags filter
-  public updateTagFilters(tags: any[]) {
-    this.tagsFilters = tags;
-  }
+  // public updateTagFilters(tags: any[]) {
+  //   this.tagsFilters = tags;
+  // }
 
-  // sorting type ASC / DESC / A-Z / Z-A etc.
   public onChangeSorting(val: string) {
     this.sortByOrder = val;
   }
 
-  public onChangeSearch(val: string){
+  public onChangeSearch(val: string) {
     this.allItems = this.products.filter((item: ProductDto) => {
       return item.name.toLocaleLowerCase().includes(val.toLocaleLowerCase());
     });
   }
 
-  // Initialize filetr Items
-  public filterItems(): ProductDto[] {
-    return this.items.filter((item: ProductDto) => {
-      const Colors: boolean = this.colorFilters.reduce((prev, curr) => {
-        // Match Color
-        if (item.colors) {
-          if (item.colors.includes(curr.color)) {
-            return prev && true;
-          }
-        }
-      }, true);
-      const Tags: boolean = this.tagsFilters.reduce((prev, curr) => {
-        // Match Tags
-        if (item.tags) {
-          if (item.tags.includes(curr)) {
-            return prev && true;
-          }
-        }
-      }, true);
-      return Colors && Tags; // return true
-    });
-  }
+  // public filterItems(): ProductDto[] {
+  //   return this.items.filter((item: ProductDto) => {
+  //     const Colors: boolean = this.colorFilters.reduce((prev, curr) => {
+  //       if (item.colors) {
+  //         if (item.colors.includes(curr.color)) {
+  //           return prev && true;
+  //         }
+  //       }
+  //     }, true);
+  //     const Tags: boolean = this.tagsFilters.reduce((prev, curr) => {
+  //       if (item.tags) {
+  //         if (item.tags.includes(curr)) {
+  //           return prev && true;
+  //         }
+  //       }
+  //     }, true);
+  //     return Colors && Tags; // return true
+  //   });
+  // }
 
   public onPageChanged(event: any) {
     this.page = event;
@@ -133,22 +125,19 @@ export class ProductListComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  public updatePriceFilters(price: any) {
-    console.log(price);
-    console.log(this.products);
+  // public updatePriceFilters(price: any) {
+  //   this.allItems = this.products.filter((item: ProductDto) => {
+  //     return item.price >= price.priceFrom && item.price <= price.priceTo;
+  //   });
+  //   console.log(this.products);
+  // }
 
-    this.allItems = this.products.filter((item: ProductDto) => {
-      return item.price >= price.priceFrom && item.price <= price.priceTo;
-    });
-    console.log(this.products);
-  }
-
-  onBrendsChanged(newBrend: string) {
-    console.log(newBrend);
-    this.allItems =
-      newBrend === 'all'
-        ? this.products
-        : this.products.filter((item) => item.brand === newBrend);
-    console.log(this.allItems);
-  }
+  // onBrendsChanged(newBrend: string) {
+  //   console.log(newBrend);
+  //   this.allItems =
+  //     newBrend === 'all'
+  //       ? this.products
+  //       : this.products.filter((item) => item.brand === newBrend);
+  //   console.log(this.allItems);
+  // }
 }

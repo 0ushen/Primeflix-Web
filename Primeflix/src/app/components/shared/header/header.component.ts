@@ -3,6 +3,8 @@ import { Product } from 'src/app/models/product.model';
 import { CartItem } from 'src/app/models/cart-item';
 import { CartService } from 'src/app/services/cart.service';
 import { AppSettings, Settings } from 'src/app/services/color-option.service';
+import { Router } from '@angular/router';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +19,8 @@ export class HeaderComponent implements OnInit {
   public flags = [{ name: 'English', image: 'assets/images/flags/gb.svg' }];
   public flag: any;
 
+  public keyword: string = '';
+
   products: Product[];
 
   indexProduct: number;
@@ -25,6 +29,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
+    private router: Router,
     public appSettings: AppSettings
   ) {
     this.settings = this.appSettings.settings;
@@ -46,5 +51,9 @@ export class HeaderComponent implements OnInit {
 
   public changeLang(flag: any) {
     this.flag = flag;
+  }
+
+  public onSubmit(f: NgForm){
+    this.router.navigate(['/shop'], { queryParams: { search: f.value.keyword } });
   }
 }

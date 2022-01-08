@@ -16,7 +16,8 @@ import { ApiUrl } from './constants/authorize.constants';
 export const API_BASE_URL = ApiUrl;
 
 export interface IProductsClient {
-    getProductsWithPagination(listId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfProductDto>;
+    getAllProducts(): Observable<ProductDto[]>;
+    getProductsWithPagination(pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfProductDto>;
 }
 
 @Injectable({
@@ -29,15 +30,66 @@ export class ProductsClient implements IProductsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient) {
         this.http = http;
-        this.baseUrl = API_BASE_URL !== undefined && API_BASE_URL !== null ? API_BASE_URL : "";
+        this.baseUrl = ApiUrl !== undefined && ApiUrl !== null ? ApiUrl : "";
     }
 
-    getProductsWithPagination(listId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined) : Observable<PaginatedListOfProductDto> {
-        let url_ = this.baseUrl + "/api/Products?";
-        if (listId === null)
-            throw new Error("The parameter 'listId' cannot be null.");
-        else if (listId !== undefined)
-            url_ += "ListId=" + encodeURIComponent("" + listId) + "&";
+    getAllProducts() : Observable<ProductDto[]> {
+        let url_ = this.baseUrl + "/api/Products/GetAllProducts";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllProducts(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllProducts(<any>response_);
+                } catch (e) {
+                    return <Observable<ProductDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProductDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllProducts(response: HttpResponseBase): Observable<ProductDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProductDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProductDto[]>(<any>null);
+    }
+
+    getProductsWithPagination(pageNumber: number | undefined, pageSize: number | undefined) : Observable<PaginatedListOfProductDto> {
+        let url_ = this.baseUrl + "/api/Products/GetProductsWithPagination?";
         if (pageNumber === null)
             throw new Error("The parameter 'pageNumber' cannot be null.");
         else if (pageNumber !== undefined)
@@ -93,77 +145,13 @@ export class ProductsClient implements IProductsClient {
     }
 }
 
-export class PaginatedListOfProductDto implements IPaginatedListOfProductDto {
-    items?: ProductDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
-
-    constructor(data?: IPaginatedListOfProductDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(ProductDto.fromJS(item));
-            }
-            this.pageNumber = _data["pageNumber"];
-            this.totalPages = _data["totalPages"];
-            this.totalCount = _data["totalCount"];
-            this.hasPreviousPage = _data["hasPreviousPage"];
-            this.hasNextPage = _data["hasNextPage"];
-        }
-    }
-
-    static fromJS(data: any): PaginatedListOfProductDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfProductDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        data["pageNumber"] = this.pageNumber;
-        data["totalPages"] = this.totalPages;
-        data["totalCount"] = this.totalCount;
-        data["hasPreviousPage"] = this.hasPreviousPage;
-        data["hasNextPage"] = this.hasNextPage;
-        return data;
-    }
-}
-
-export interface IPaginatedListOfProductDto {
-    items?: ProductDto[];
-    pageNumber?: number;
-    totalPages?: number;
-    totalCount?: number;
-    hasPreviousPage?: boolean;
-    hasNextPage?: boolean;
-}
-
 export class ProductDto implements IProductDto {
     id?: number;
     name?: string;
     price?: number;
     salePrice?: number;
     discount?: number;
-    pictures?: MoviePictureDto[];
+    pictures?: MediaPictureDto[];
     shortDetails?: string;
     description?: string;
     stock?: number;
@@ -194,7 +182,7 @@ export class ProductDto implements IProductDto {
             if (Array.isArray(_data["pictures"])) {
                 this.pictures = [] as any;
                 for (let item of _data["pictures"])
-                    this.pictures!.push(MoviePictureDto.fromJS(item));
+                    this.pictures!.push(MediaPictureDto.fromJS(item));
             }
             this.shortDetails = _data["shortDetails"];
             this.description = _data["description"];
@@ -264,7 +252,7 @@ export interface IProductDto {
     price?: number;
     salePrice?: number;
     discount?: number;
-    pictures?: MoviePictureDto[];
+    pictures?: MediaPictureDto[];
     shortDetails?: string;
     description?: string;
     stock?: number;
@@ -277,11 +265,11 @@ export interface IProductDto {
     colors?: string[];
 }
 
-export class MoviePictureDto implements IMoviePictureDto {
+export class MediaPictureDto implements IMediaPictureDto {
     small?: string;
     big?: string;
 
-    constructor(data?: IMoviePictureDto) {
+    constructor(data?: IMediaPictureDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -297,9 +285,9 @@ export class MoviePictureDto implements IMoviePictureDto {
         }
     }
 
-    static fromJS(data: any): MoviePictureDto {
+    static fromJS(data: any): MediaPictureDto {
         data = typeof data === 'object' ? data : {};
-        let result = new MoviePictureDto();
+        let result = new MediaPictureDto();
         result.init(data);
         return result;
     }
@@ -312,9 +300,73 @@ export class MoviePictureDto implements IMoviePictureDto {
     }
 }
 
-export interface IMoviePictureDto {
+export interface IMediaPictureDto {
     small?: string;
     big?: string;
+}
+
+export class PaginatedListOfProductDto implements IPaginatedListOfProductDto {
+    items?: ProductDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfProductDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(ProductDto.fromJS(item));
+            }
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfProductDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfProductDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data;
+    }
+}
+
+export interface IPaginatedListOfProductDto {
+    items?: ProductDto[];
+    pageNumber?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
 }
 
 export class SwaggerException extends Error {

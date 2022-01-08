@@ -15,8 +15,8 @@
           class="filter-row mat-elevation-z1 text-muted"
         >
           <mat-form-field appearance="legacy">
-            <mat-label>Search product</mat-label>
-            <input (change)="onChangeSearch($event.target.value)" matInput placeholder="Placeholder" />
+            <mat-label>{{search}}</mat-label>
+            <input (change)="onChangeSearch($event.target.value)" matInput />
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
           <button
@@ -35,6 +35,18 @@
               <option value="z-a">Alphabetically, Z-A</option>
               <option value="low">Price, low to high</option>
               <option value="high">Price, high to low</option>
+            </select>
+          </div>
+          <div>
+            <select (change)="onChangeInStock($event.target.value)">
+              <option value="all">All</option>
+              <option value="in-stock">Only in stock</option>
+            </select>
+          </div>
+          <div>
+            <select (change)="onChangeCategory($event.target.value)">
+              <option value="all">All</option>
+              <option *ngFor="let category of getCategories()" [ngValue]="category">{{category}}</option>
             </select>
           </div>
           <div>

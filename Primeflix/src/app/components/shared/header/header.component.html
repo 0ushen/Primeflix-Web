@@ -14,10 +14,10 @@
       </div>
 
       <div fxflexoffset.gt-sm="10" fxFlex class="search-form">
-        <form class="search-form" fxLayout="row">
+        <form class="search-form" fxLayout="row" #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
           <div class="form-wrap">
-            <input type="text" placeholder="Type to search..." />
-            <button class="btn-search" type="submit">Search</button>
+            <input name="keyword" ngModel type="text" placeholder="Type to search..." />
+            <button type="submit" class="btn-search">Search</button>
           </div>
         </form>
       </div>

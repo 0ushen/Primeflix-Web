@@ -52,7 +52,7 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit() {
     this.productsService
       .getProducts()
-      .subscribe((product) => (this.products = product.items));
+      .subscribe((products) => (this.products = products));
 
     this.getRelatedProducts();
   }
@@ -115,8 +115,8 @@ export class ProductDetailsComponent implements OnInit {
   getRelatedProducts() {
     this.productsService
       .getProducts()
-      .subscribe((product: PaginatedListOfProductDto) => {
-        this.products = product.items;
+      .subscribe((products: ProductDto[]) => {
+        this.products = products;
       });
   }
 

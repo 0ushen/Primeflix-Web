@@ -34,6 +34,7 @@ import { ShoppingWidgetsComponent } from './shopping-widgets/shopping-widgets.co
 import { ShoppingWidgetsTwoComponent } from './shopping-widgets-two/shopping-widgets-two.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthorizationModule } from '../authorization/authorization.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,9 @@ import { AuthorizationModule } from '../authorization/authorization.module';
     MatCardModule,
     FlexLayoutModule,
     NgxSkeletonLoaderModule,
-    AuthorizationModule
+    AuthorizationModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     CommonModule,

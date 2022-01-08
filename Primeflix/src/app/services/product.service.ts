@@ -5,7 +5,6 @@ import { Product } from 'src/app/models/product.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import {
-  PaginatedListOfProductDto,
   ProductDto,
   ProductsClient,
 } from '../web-api-client';
@@ -24,12 +23,12 @@ export class ProductService {
     private productsClient: ProductsClient
   ) {}
 
-  private products(): Observable<PaginatedListOfProductDto> {
-    return this.productsClient.getProductsWithPagination(1, 1, 10);
+  private products(): Observable<ProductDto[]> {
+    return this.productsClient.getAllProducts();
   }
 
   // Get Banners
-  public getProducts(): Observable<PaginatedListOfProductDto> {
+  public getProducts(): Observable<ProductDto[]> {
     return this.products();
   }
 
@@ -37,7 +36,7 @@ export class ProductService {
   public getProduct(id: number): Observable<ProductDto> {
     return this.products().pipe(
       map((items) => {
-        return items.items.find((item: ProductDto) => {
+        return items.find((item: ProductDto) => {
           return item.id === id;
         });
       })
@@ -48,7 +47,7 @@ export class ProductService {
   public getProductByCategory(category: string): Observable<ProductDto[]> {
     return this.products().pipe(
       map((items) =>
-        items.items.filter((item: ProductDto) => {
+        items.filter((item: ProductDto) => {
           if (category == 'all')
             return item;
           else

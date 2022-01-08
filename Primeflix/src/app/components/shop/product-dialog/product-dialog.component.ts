@@ -29,7 +29,7 @@ export class ProductDialogComponent implements OnInit {
   ngOnInit() {
     this.productsService
       .getProducts()
-      .subscribe((product) => (this.products = product.items));
+      .subscribe((products) => (this.products = products));
   }
 
   public addToCart(product: ProductDto, quantity) {

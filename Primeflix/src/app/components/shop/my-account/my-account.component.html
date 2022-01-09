@@ -12,19 +12,37 @@
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="First name (required)" formControlName="firstName" required />
+                    <mat-error *ngIf="firstName.hasError('required')">
+                      Please enter a valid First name
+                    </mat-error>
+                    <mat-error *ngIf="firstName.hasError('maxlength')">
+                      First name must not exceed 50 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="Last name (required)" formControlName="lastName" required />
+                    <mat-error *ngIf="lastName.hasError('required')">
+                      Please enter a valid Last name
+                    </mat-error>
+                    <mat-error *ngIf="lastName.hasError('maxlength')">
+                      Last name must not exceed 50 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="Phone number (required)" formControlName="phoneNumber" required />
-                    <!-- <mat-error *ngIf="errorHandling('profile.phoneNumber', 'required')">
+                    <mat-error *ngIf="phoneNumber.hasError('required')">
                       Please enter a valid phone number
-                    </mat-error> -->
+                    </mat-error>
+                    <mat-error *ngIf="phoneNumber.hasError('minlength')">
+                      Phone number must be at least 6 characters
+                    </mat-error>
+                    <mat-error *ngIf="phoneNumber.hasError('maxlength')">
+                      Phone number must not exceed 14 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -39,31 +57,70 @@
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="Country (required)" formControlName="country" required />
+                    <mat-error *ngIf="country.hasError('required')">
+                      Please enter a valid Country
+                    </mat-error>
+                    <mat-error *ngIf="country.hasError('maxlength')">
+                      Country must not exceed 50 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="City (required)" formControlName="city" required />
+                    <mat-error *ngIf="city.hasError('required')">
+                      Please enter a valid City
+                    </mat-error>
+                    <mat-error *ngIf="city.hasError('maxlength')">
+                      City must not exceed 50 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="Zip code (required)" formControlName="postalCode" required />
+                    <mat-error *ngIf="postalCode.hasError('required')">
+                      Please enter a valid Zip code
+                    </mat-error>
+                    <mat-error *ngIf="postalCode.hasError('minlength')">
+                      Zip code must be at least 6 characters
+                    </mat-error>
+                    <mat-error *ngIf="postalCode.hasError('maxlength')">
+                      Zip code must not exceed 14 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="Street (required)" formControlName="street" required />
+                    <mat-error *ngIf="street.hasError('required')">
+                      Please enter a valid Street
+                    </mat-error>
+                    <mat-error *ngIf="street.hasError('minlength')">
+                      Street must be at least 5 characters
+                    </mat-error>
+                    <mat-error *ngIf="street.hasError('maxlength')">
+                      Street must not exceed 100 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="House number (required)" formControlName="number" required />
+                    <mat-error *ngIf="number.hasError('required')">
+                      Please enter a valid House number
+                    </mat-error>
+                    <mat-error *ngIf="number.hasError('maxlength')">
+                      House number must not exceed 3 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
                   <mat-form-field class="w-100">
                     <input matInput placeholder="PO Box" formControlName="poBox" />
+                    <mat-error *ngIf="poBox.hasError('maxlength')">
+                      PO Box must not exceed 3 characters
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>

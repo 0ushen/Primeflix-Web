@@ -24,17 +24,17 @@ export class MyAccountComponent implements OnInit {
   ) {
     this.profileForm = new FormGroup({
       profile: new FormGroup({
-        firstName: new FormControl(),
-        lastName: new FormControl(),
-        phoneNumber: new FormControl(),
+        firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+        lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+        phoneNumber: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(14)]),
       }),
       address: new FormGroup({
-        country: new FormControl(),
-        city: new FormControl(),
-        postalCode: new FormControl(),
-        street: new FormControl(),
-        number: new FormControl(),
-        poBox: new FormControl(),
+        country: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+        city: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+        postalCode: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(7)]),
+        street: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+        number: new FormControl('', [Validators.required, Validators.maxLength(3)]),
+        poBox: new FormControl('', [Validators.maxLength(3)]),
       }),
     });
   }
@@ -74,11 +74,15 @@ export class MyAccountComponent implements OnInit {
     userInfo.address.number = address.number;
     userInfo.address.poBox = address.poBox;
 
+    if(!this.profileForm.valid){
+      return;
+    }
+
     this.accountsService.upsertUser(userInfo).subscribe(
       (response) => {
         console.log(response);
         this.snackBar.open('Info saved', '×', {
-          panelClass: [status],
+          panelClass: 'success',
           verticalPosition: 'top',
           duration: 3000,
         });
@@ -94,9 +98,9 @@ export class MyAccountComponent implements OnInit {
     );
   }
 
-  // public errorHandling = (control: string, error: string) => {
-  //   return this.profileForm.controls[control].hasError(error);
-  // };
+  public errorHandling = (control: string, error: string) => {
+    return this.profileForm.controls[control].hasError(error);
+  };
 
   get firstName() {
     return this.profileForm.get('profile.firstName');

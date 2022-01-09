@@ -5,6 +5,8 @@ import { CartService } from 'src/app/services/cart.service';
 import { AppSettings, Settings } from 'src/app/services/color-option.service';
 import { Router } from '@angular/router';
 import {NgForm} from '@angular/forms';
+import { AuthorizeService } from 'src/app/services/authorize.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +14,8 @@ import {NgForm} from '@angular/forms';
   styleUrls: ['./header.component.sass'],
 })
 export class HeaderComponent implements OnInit {
+  public isAuthenticated: Observable<boolean>;
+
   public sidenavMenuItems: Array<any>;
 
   public currencies = ['EUR'];
@@ -30,7 +34,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private router: Router,
-    public appSettings: AppSettings
+    public appSettings: AppSettings,
+    public authorizeService: AuthorizeService
   ) {
     this.settings = this.appSettings.settings;
     this.cartService
@@ -41,6 +46,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAuthenticated = this.authorizeService.isAuthenticated();
     this.currency = this.currencies[0];
     this.flag = this.flags[0];
   }

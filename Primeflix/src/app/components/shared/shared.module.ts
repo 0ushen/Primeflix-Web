@@ -35,6 +35,7 @@ import { ShoppingWidgetsTwoComponent } from './shopping-widgets-two/shopping-wid
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AccountService } from 'src/app/services/account.service';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ShoppingWidgetsComponent,
     ShoppingWidgetsTwoComponent
   ],
-  providers: [ProductService, CartService, AppSettings],
+  providers: [AccountService, ProductService, CartService, AppSettings],
 })
 export class SharedModule {}

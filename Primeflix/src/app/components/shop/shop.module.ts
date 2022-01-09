@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { from } from 'rxjs';
-
 import { ShopRoutingModule } from './shop-routing-module';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
@@ -14,6 +12,7 @@ import { ProductZoomComponent } from './product-details/product-zoom/product-zoo
 import { ProductComponent } from './product/product.component';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { AuthorizationModule } from '../authorization/authorization.module';
+import { MyAccountComponent } from './my-account/my-account.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,8 @@ import { AuthorizationModule } from '../authorization/authorization.module';
     ProductListComponent,
     ProductZoomComponent,
     ProductComponent,
-    ProductDialogComponent
+    ProductDialogComponent,
+    MyAccountComponent
   ],
   imports: [
     CommonModule,

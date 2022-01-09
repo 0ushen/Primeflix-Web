@@ -15,6 +15,123 @@ import { ApiUrl } from './constants/authorize.constants';
 
 export const API_BASE_URL = ApiUrl;
 
+export interface IAccountClient {
+    upsertUser(command: UpsertUserCommand): Observable<FileResponse>;
+    getCurrentUserInfo(): Observable<PrimeflixUserDto>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AccountClient implements IAccountClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient) {
+        this.http = http;
+        this.baseUrl = API_BASE_URL !== undefined && API_BASE_URL !== null ? API_BASE_URL : "";
+    }
+
+    upsertUser(command: UpsertUserCommand) : Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Account/UpsertUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsertUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsertUser(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsertUser(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    getCurrentUserInfo() : Observable<PrimeflixUserDto> {
+        let url_ = this.baseUrl + "/api/Account/GetCurrentUserInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCurrentUserInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCurrentUserInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<PrimeflixUserDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PrimeflixUserDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCurrentUserInfo(response: HttpResponseBase): Observable<PrimeflixUserDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PrimeflixUserDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PrimeflixUserDto>(<any>null);
+    }
+}
+
 export interface IProductsClient {
     getAllProducts(): Observable<ProductDto[]>;
     getProductsWithPagination(pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfProductDto>;
@@ -30,7 +147,7 @@ export class ProductsClient implements IProductsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient) {
         this.http = http;
-        this.baseUrl = ApiUrl !== undefined && ApiUrl !== null ? ApiUrl : "";
+        this.baseUrl = API_BASE_URL !== undefined && API_BASE_URL !== null ? API_BASE_URL : "";
     }
 
     getAllProducts() : Observable<ProductDto[]> {
@@ -143,6 +260,162 @@ export class ProductsClient implements IProductsClient {
         }
         return _observableOf<PaginatedListOfProductDto>(<any>null);
     }
+}
+
+export class UpsertUserCommand implements IUpsertUserCommand {
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    address?: AddressDto;
+
+    constructor(data?: IUpsertUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpsertUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["phoneNumber"] = this.phoneNumber;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUpsertUserCommand {
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    address?: AddressDto;
+}
+
+export class AddressDto implements IAddressDto {
+    country?: string;
+    city?: string;
+    postalCode?: string;
+    street?: string;
+    number?: string;
+    poBox?: string;
+
+    constructor(data?: IAddressDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.country = _data["country"];
+            this.city = _data["city"];
+            this.postalCode = _data["postalCode"];
+            this.street = _data["street"];
+            this.number = _data["number"];
+            this.poBox = _data["poBox"];
+        }
+    }
+
+    static fromJS(data: any): AddressDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddressDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["country"] = this.country;
+        data["city"] = this.city;
+        data["postalCode"] = this.postalCode;
+        data["street"] = this.street;
+        data["number"] = this.number;
+        data["poBox"] = this.poBox;
+        return data;
+    }
+}
+
+export interface IAddressDto {
+    country?: string;
+    city?: string;
+    postalCode?: string;
+    street?: string;
+    number?: string;
+    poBox?: string;
+}
+
+export class PrimeflixUserDto implements IPrimeflixUserDto {
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    address?: AddressDto;
+
+    constructor(data?: IPrimeflixUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.address = _data["address"] ? AddressDto.fromJS(_data["address"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PrimeflixUserDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PrimeflixUserDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["phoneNumber"] = this.phoneNumber;
+        data["address"] = this.address ? this.address.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IPrimeflixUserDto {
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    address?: AddressDto;
 }
 
 export class ProductDto implements IProductDto {
@@ -367,6 +640,13 @@ export interface IPaginatedListOfProductDto {
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {

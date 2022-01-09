@@ -1,0 +1,81 @@
+<div class="my-account sec-padding">
+  <div class="container">
+    <mat-card fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="start start" class="p-0">
+      <form [formGroup]="profileForm" (ngSubmit)="submitForm()" novalidate>
+        <div class="my-account-wrap p-0" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="start start">
+          <div class="register-wrapper pr-15" fxFlex="100" fxFlex.gt-md="50" fxFlex.md="50">
+            <div class="title">
+              <h3>Your profile</h3>
+            </div>
+            <div class="register-body">
+              <div fxLayout="row wrap" formGroupName="profile">
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="First name (required)" formControlName="firstName" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="Last name (required)" formControlName="lastName" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="Phone number (required)" formControlName="phoneNumber" required />
+                    <!-- <mat-error *ngIf="errorHandling('profile.phoneNumber', 'required')">
+                      Please enter a valid phone number
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="register-wrapper pr-15" fxFlex="100" fxFlex.gt-md="50" fxFlex.md="50">
+            <div class="title">
+              <h3>Your address</h3>
+            </div>
+            <div class="register-body">
+              <div fxLayout="row wrap" formGroupName="address">
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="Country (required)" formControlName="country" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="City (required)" formControlName="city" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="Zip code (required)" formControlName="postalCode" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="Street (required)" formControlName="street" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="House number (required)" formControlName="number" required />
+                  </mat-form-field>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" ngClass.sm="mt-1" ngClass.xs="mt-1">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="PO Box" formControlName="poBox" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-account-wrap p-0" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="start start" >
+          <button class="btn-project" mat-raised-button color="primary" type="submit">
+            Save
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

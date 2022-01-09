@@ -88,8 +88,7 @@ export class CartService {
   }
 
   public removeFromCart(item: CartItem) {
-    if (item === undefined)
-      return false;
+    if (item === undefined) return false;
 
     const index = products.indexOf(item);
     products.splice(index, 1);
@@ -114,8 +113,7 @@ export class CartService {
       if (items.product.id == product.id) {
         let qty = products[index].quantity + quantity;
         let stock = this.calculateStockCounts(products[index], quantity);
-        if (qty != 0 && stock)
-          products[index]['quantity'] = qty;
+        if (qty != 0 && stock) products[index]['quantity'] = qty;
         localStorage.setItem('cartItem', JSON.stringify(products));
         return true;
       }

@@ -1,10 +1,12 @@
+import { environment } from "src/environments/environment";
+
 export const ApplicationName = 'Primeflix';
 
 export const ReturnUrlType = 'returnUrl';
 
-export const IdentityServerUrl = 'https://localhost:6001';
-export const ClientUrl = 'http://localhost:4200';
-export const ApiUrl = 'https://localhost:5001';
+export const IdentityServerUrl = environment.identityServerUrl;
+export const ClientUrl = environment.clientUrl;
+export const ApiUrl = environment.apiUrl;
 
 
 export const QueryParameterNames = {

@@ -60,6 +60,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'primeflix-client'
-          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1E1B9D384F514E76918F4B432C2FA581 }}
-          package: .
+          package: ./dist/Primeflix

@@ -3,5 +3,5 @@ export const environment = {
   title: 'Production Environment',
   apiUrl: 'https://primeflix.azurewebsites.net',
   identityServerUrl: 'https://primeflix-identity-server.azurewebsites.net',
-  clientUrl: 'https://primeflix-client.azurewebsites.net'
+  clientUrl: 'https://brave-bay-07a00b203.azurestaticapps.net'
 };
